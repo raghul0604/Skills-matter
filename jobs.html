@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matching Jobs — SkillsMatter</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0f2ff;min-height:100vh;}
+
+/* NAVBAR */
+.navbar{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:12px 28px;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px;box-shadow:0 2px 18px rgba(0,0,0,0.45);}
+.logo{font-size:1.25rem;font-weight:800;letter-spacing:1px;text-decoration:none;color:#fff;}
+.logo span{color:#ffcc00;}
+.nav-links{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.nav-links a{text-decoration:none;color:#ccc;font-weight:500;font-size:0.82rem;padding:5px 10px;border-radius:8px;transition:0.25s;}
+.nav-links a:hover{color:#ffcc00;background:#ffffff12;}
+.nav-links a.active{color:#ffcc00;background:#ffffff10;}
+
+/* HERO */
+.jobs-hero{background:linear-gradient(135deg,#1a1a2e 0%,#0f3460 60%,#16213e 100%);padding:30px 20px 24px;text-align:center;position:relative;overflow:hidden;}
+.jobs-hero::before{content:'';position:absolute;width:260px;height:260px;background:radial-gradient(circle,#ffcc0015,transparent 70%);border-radius:50%;top:-70px;right:-50px;pointer-events:none;}
+.jobs-hero h1{font-size:1.45rem;color:#fff;font-weight:700;position:relative;z-index:1;}
+.jobs-hero p{color:#aaa;font-size:0.83rem;margin-top:6px;position:relative;z-index:1;}
+
+/* PROFILE STRIP */
+.pstrip{background:#fff;border-bottom:1.5px solid #ebebf8;padding:13px 20px;}
+.pstrip-in{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.pstrip-left{display:flex;align-items:center;gap:12px;}
+.pstrip-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#ffcc00,#ff9900);display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:800;color:#1a1a2e;flex-shrink:0;border:2px solid rgba(255,204,0,0.3);}
+.pstrip-info h3{font-size:0.9rem;font-weight:700;color:#1a1a2e;}
+.pstrip-info p{font-size:0.73rem;color:#999;margin-top:2px;}
+.pstrip-skills{display:flex;flex-wrap:wrap;gap:5px;}
+.pstrip-skill{background:#eef0ff;color:#3d52d5;padding:3px 11px;border-radius:12px;font-size:0.68rem;font-weight:600;}
+.edit-btn{padding:8px 18px;background:transparent;border:1.5px solid #1a1a2e;border-radius:20px;font-size:0.76rem;font-weight:600;color:#1a1a2e;cursor:pointer;transition:0.2s;text-decoration:none;white-space:nowrap;}
+.edit-btn:hover{background:#1a1a2e;color:#ffcc00;}
+
+/* FILTERS */
+.filters-wrap{max-width:1060px;margin:18px auto 0;padding:0 20px;}
+.filters-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;}
+.filter-label{font-size:0.75rem;font-weight:700;color:#666;white-space:nowrap;}
+.fbtn{padding:6px 16px;border-radius:20px;border:1.5px solid #e0e0f0;background:#fff;font-size:0.73rem;font-weight:600;color:#666;cursor:pointer;transition:0.2s;}
+.fbtn:hover,.fbtn.on{background:#1a1a2e;color:#ffcc00;border-color:#1a1a2e;}
+
+/* RESULTS */
+.results-wrap{max-width:1060px;margin:18px auto 50px;padding:0 20px;}
+.res-hd{font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.ai-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#6c63ff18,#48cfad18);border:1px solid #6c63ff40;border-radius:20px;padding:3px 11px;font-size:0.67rem;color:#6c63ff;font-weight:700;}
+.job-grid{display:flex;flex-wrap:wrap;gap:18px;justify-content:flex-start;}
+
+/* JOB CARD */
+.jcard{background:#fff;padding:20px;border-radius:20px;box-shadow:0 3px 18px rgba(108,99,255,0.07);border:1.5px solid #ebebf8;transition:all 0.3s ease;position:relative;overflow:hidden;width:292px;}
+.jcard::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#6c63ff,#48cfad);}
+.jcard:hover{transform:translateY(-6px);box-shadow:0 14px 34px rgba(108,99,255,0.14);border-color:#b8b5ff;}
+.jcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.jcard h3{color:#1a1a2e;font-size:0.93rem;font-weight:700;line-height:1.35;flex:1;}
+.jcard-co-logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#f0f4ff,#e8eeff);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:#6c63ff;flex-shrink:0;border:1px solid #dde0ff;}
+.jcard .co{color:#6c63ff;font-size:0.76rem;font-weight:600;margin-top:4px;}
+.jmeta{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0 6px;}
+.jb{padding:3px 9px;border-radius:16px;font-size:0.66rem;font-weight:600;}
+.jb.loc{background:#fff5e8;color:#b5700a;}
+.jb.sal{background:#e8fff5;color:#1a9e6e;}
+.jb.typ{background:#f0f4ff;color:#3d52d5;}
+.jb.exp{background:#fff0f5;color:#b5336a;}
+.jb.match{background:#e8fff5;color:#1a9e6e;border:1px solid #b8f0db;}
+.jtags{font-size:0.68rem;color:#bbb;margin-top:4px;line-height:1.5;}
+.jdesc{font-size:0.72rem;color:#777;margin-top:7px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.apply-btn{width:100%;margin-top:13px;padding:10px 0;border-radius:20px;border:none;background:linear-gradient(135deg,#ffcc00,#ff9900);cursor:pointer;font-weight:700;font-size:0.82rem;color:#1a1a2e;transition:0.3s;text-decoration:none;display:block;text-align:center;letter-spacing:0.2px;}
+.apply-btn:hover{transform:scale(1.03);box-shadow:0 5px 16px rgba(255,153,0,0.38);}
+
+/* LOADING */
+.loading-box{text-align:center;padding:55px 20px;color:#999;width:100%;}
+.spinner{width:38px;height:38px;border:4px solid #ebebf8;border-top:4px solid #6c63ff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 14px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* NO PROFILE */
+.no-profile{text-align:center;padding:60px 20px;width:100%;}
+.np-card{background:#fff;border-radius:24px;padding:40px 30px;max-width:400px;margin:0 auto;box-shadow:0 8px 32px rgba(108,99,255,0.1);border:1.5px solid #ebebf8;}
+.np-icon{font-size:3.2rem;display:block;margin-bottom:16px;}
+.np-card h2{font-size:1.15rem;color:#1a1a2e;font-weight:700;}
+.np-card p{color:#999;font-size:0.84rem;margin:8px 0 22px;line-height:1.6;}
+.go-profile{display:inline-block;padding:13px 30px;background:linear-gradient(135deg,#ffcc00,#ff9900);color:#1a1a2e;font-weight:700;border-radius:25px;text-decoration:none;font-size:0.9rem;transition:0.3s;}
+.go-profile:hover{transform:scale(1.05);box-shadow:0 6px 18px rgba(255,153,0,0.35);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .navbar{flex-direction:column;align-items:flex-start;padding:10px 14px;}
+  .nav-links{width:100%;justify-content:space-between;}
+  .job-grid{justify-content:center;}
+  .jcard{width:100%;max-width:400px;}
+  .pstrip-in{flex-direction:column;align-items:flex-start;}
+}
+@media(max-width:480px){
+  .jobs-hero h1{font-size:1.15rem;}
+  .jcard{width:100%;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="logo" href="index.html"><span>Skills</span>Matter</a>
+  <div class="nav-links">
+    <a href="index.html">🏠 Home</a>
+    <a href="company.html">🏢 Companies</a>
+    <a href="profile.html">👤 Profile</a>
+    <a href="jobs.html" class="active">💼 Jobs</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="jobs-hero">
+  <h1 id="heroTitle">💼 Your Matching Jobs</h1>
+  <p id="heroSub">Jobs matched based on your profile skills &amp; education</p>
+</div>
+
+<!-- PROFILE STRIP -->
+<div class="pstrip" id="profileStrip" style="display:none;">
+  <div class="pstrip-in">
+    <div class="pstrip-left">
+      <div class="pstrip-av" id="stripAvatar">?</div>
+      <div class="pstrip-info">
+        <h3 id="stripName">—</h3>
+        <p id="stripDeg">—</p>
+      </div>
+    </div>
+    <div class="pstrip-skills" id="stripSkills"></div>
+    <a class="edit-btn" href="profile.html">✏️ Edit Profile</a>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters-wrap" id="filtersWrap" style="display:none;">
+  <div class="filters-row">
+    <span class="filter-label">Filter:</span>
+    <button class="fbtn on" onclick="applyFilter('All',this)">All</button>
+    <button class="fbtn" onclick="applyFilter('Full-time',this)">Full-time</button>
+    <button class="fbtn" onclick="applyFilter('Part-time',this)">Part-time</button>
+    <button class="fbtn" onclick="applyFilter('Remote',this)">Remote</button>
+    <button class="fbtn" onclick="applyFilter('Internship',this)">Internship</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results-wrap">
+  <div id="resHeader" style="display:none;" class="res-hd">
+    <span id="resCount"></span>
+    <span class="ai-badge">🔗 Profile-Based Matches</span>
+  </div>
+  <div class="job-grid" id="jobGrid">
+    <div class="loading-box"><div class="spinner"></div><p>Loading your profile...</p></div>
+  </div>
+</div>
+
+<script>
+const careerMap = {
+  "TCS":"https://www.tcs.com/careers","Infosys":"https://career.infosys.com",
+  "Wipro":"https://careers.wipro.com","HCLTech":"https://www.hcltech.com/careers",
+  "Tech Mahindra":"https://careers.techmahindra.com","Cognizant":"https://careers.cognizant.com",
+  "Accenture":"https://www.accenture.com/in-en/careers","Capgemini":"https://www.capgemini.com/in-en/careers/",
+  "Flipkart":"https://www.flipkartcareers.com","Zomato":"https://www.zomato.com/careers",
+  "Swiggy":"https://careers.swiggy.com","Paytm":"https://paytm.com/careers",
+  "Razorpay":"https://razorpay.com/jobs/","CRED":"https://careers.cred.club",
+  "HDFC Bank":"https://www.hdfcbank.com","ICICI Bank":"https://www.icicicareers.com",
+  "SBI":"https://www.sbi.co.in/careers","Deloitte":"https://apply.deloitte.com/careers/SearchJobs/india",
+  "KPMG":"https://home.kpmg/in/en/home/careers.html"
+};
+
+let allJobs = [];
+let profile = null;
+let activeFilter = 'All';
+
+function getApplyUrl(j){
+  if(j.applyUrl && j.applyUrl.startsWith('http')) return j.applyUrl;
+  const ck = Object.keys(careerMap).find(k => j.company && j.company.toLowerCase().includes(k.toLowerCase()));
+  return ck ? careerMap[ck] : `https://www.naukri.com/jobs-in-india?k=${encodeURIComponent(j.title||'')}`;
+}
+
+function getCoInitials(name){
+  if(!name) return '?';
+  const words = name.trim().split(' ');
+  return words.length === 1 ? words[0].substring(0,2).toUpperCase() : (words[0][0]+words[1][0]).toUpperCase();
+}
+
+function applyFilter(type, btn){
+  activeFilter = type;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const filtered = type === 'All' ? allJobs : allJobs.filter(j => (j.type||'Full-time') === type);
+  renderCards(filtered);
+}
+
+function renderCards(jobs){
+  const grid = document.getElementById('jobGrid');
+  if(!jobs.length){
+    grid.innerHTML = `<div style="text-align:center;padding:40px;color:#999;width:100%;">No jobs found for this filter. Try "All".</div>`;
+    return;
+  }
+  grid.innerHTML = jobs.map(j => {
+    const url = getApplyUrl(j);
+    const skillList = (profile.skills||[]);
+    const jobSkills = (j.skills||'').toLowerCase();
+    const matched = skillList.filter(s => jobSkills.includes(s.toLowerCase()));
+    return `
+    <div class="jcard">
+      <div class="jcard-top">
+        <div>
+          <h3>${j.title}</h3>
+          <div class="co">🏢 ${j.company}</div>
+        </div>
+        <div class="jcard-co-logo">${getCoInitials(j.company)}</div>
+      </div>
+      <div class="jmeta">
+        <span class="jb loc">📍 ${j.location||'India'}</span>
+        ${j.salary ? `<span class="jb sal">💰 ${j.salary}</span>` : ''}
+        <span class="jb typ">${j.type||'Full-time'}</span>
+        ${j.experience ? `<span class="jb exp">⏱ ${j.experience}</span>` : ''}
+        ${matched.length ? `<span class="jb match">✅ ${matched.length} skill match</span>` : ''}
+      </div>
+      ${j.skills ? `<div class="jtags">🛠 ${j.skills}</div>` : ''}
+      ${j.description ? `<div class="jdesc">${j.description}</div>` : ''}
+      <a class="apply-btn" href="${url}" target="_blank" rel="noopener noreferrer">Apply Now →</a>
+    </div>`;
+  }).join('');
+}
+
+async function loadJobs(){
+  const raw = localStorage.getItem('smProfile');
+  const grid = document.getElementById('jobGrid');
+
+  if(!raw){
+    grid.innerHTML = `
+      <div class="no-profile">
+        <div class="np-card">
+          <span class="np-icon">📝</span>
+          <h2>Profile Not Found</h2>
+          <p>Please fill in your profile first so we can find the best matching jobs for you.</p>
+          <a class="go-profile" href="profile.html">👤 Create Profile →</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  try { profile = JSON.parse(raw); }
+  catch(e){ profile = {}; }
+
+  // Show profile strip
+  document.getElementById('profileStrip').style.display = 'block';
+  document.getElementById('filtersWrap').style.display  = 'block';
+  document.getElementById('resHeader').style.display    = 'flex';
+
+  const name = profile.name || 'User';
+  document.getElementById('stripAvatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('stripName').textContent   = name;
+
+  let degStr = [profile.degree, profile.branch].filter(Boolean).join(' — ');
+  if(profile.cgpa) degStr += ' • ' + profile.cgpa;
+  if(profile.arrears && profile.arrears != '0') degStr += ` • ${profile.arrears} Arrear(s)`;
+  document.getElementById('stripDeg').textContent = degStr || 'Education not set';
+  document.getElementById('heroTitle').textContent = `💼 Jobs for ${name}`;
+
+  const skillsEl = document.getElementById('stripSkills');
+  const sk = profile.skills || [];
+  skillsEl.innerHTML = sk.slice(0,5).map(s =>
+    `<span class="pstrip-skill">${s}</span>`
+  ).join('') + (sk.length > 5 ? `<span class="pstrip-skill">+${sk.length-5}</span>` : '');
+
+  // Build query
+  let qParts = [];
+  if(sk.length) qParts.push(sk.slice(0,4).join(' '));
+  if(profile.branch) qParts.push(profile.branch);
+  if(!qParts.length && profile.degree) qParts.push(profile.degree);
+  if(!qParts.length) qParts.push('software developer');
+  const query = qParts.join(' ');
+
+  document.getElementById('heroSub').textContent = `Finding jobs for: ${sk.slice(0,3).join(', ')||query}`;
+  grid.innerHTML = `<div class="loading-box"><div class="spinner"></div><p>🔍 Finding best jobs for your profile...</p></div>`;
+
+  try{
+    const res  = await fetch(`https://skills-matters-backend.onrender.com/api/jobs?q=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    let jobs = (data.jobs||[]).slice(0, 18);
+
+    if(profile.exp === 'Fresher (0 years)' || profile.exp === '0–1 year'){
+      const f = jobs.filter(j => !j.experience || /0|1|fresher|entry|junior/i.test(j.experience));
+      if(f.length >= 3) jobs = f;
+    }
+
+    if(parseInt(profile.arrears) >= 3){
+      const f = jobs.filter(j => !/\b(TCS|Infosys|Wipro|Cognizant)\b/i.test(j.company||''));
+      if(f.length >= 3) jobs = f;
+    }
+
+    if(!jobs.length){
+      grid.innerHTML = `<div style="text-align:center;padding:50px;color:#999;width:100%;">
+        No matching jobs found right now.<br><br>
+        <a href="profile.html" style="color:#6c63ff;font-weight:600;">✏️ Update profile with more skills →</a>
+      </div>`;
+      return;
+    }
+
+    allJobs = jobs;
+    document.getElementById('resCount').textContent = `${jobs.length} jobs matched for you`;
+    renderCards(jobs);
+
+  }catch(e){
+    grid.innerHTML = `<div style="text-align:center;padding:50px;color:#e74c3c;width:100%;">
+      ⚠️ Could not load jobs. Please check your internet connection.
+    </div>`;
+  }
+}
+
+loadJobs();
+</script>
+</body>
+</html>

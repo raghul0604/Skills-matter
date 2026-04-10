@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillsMatter – Find Jobs in India</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f7f8fc;overflow-x:hidden;}
+
+/* ── NAVBAR ── */
+.navbar{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:12px 30px;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px;box-shadow:0 2px 16px rgba(0,0,0,0.4);}
+.logo{font-size:1.3rem;font-weight:bold;letter-spacing:1px;}
+.logo span{color:#ffcc00;}
+.nav-center input{padding:8px 18px;border-radius:25px;border:none;outline:none;width:240px;background:#ffffff18;color:#fff;font-size:0.88rem;transition:0.3s;}
+.nav-center input:focus{background:#ffffff28;width:270px;}
+.nav-center input::placeholder{color:#aaa;}
+.nav-links{display:flex;align-items:center;flex-wrap:wrap;gap:10px;}
+.nav-links a{text-decoration:none;color:#ddd;font-weight:500;font-size:0.88rem;transition:0.3s;padding:4px 8px;border-radius:8px;}
+.nav-links a:hover{color:#ffcc00;background:#ffffff10;}
+#userBtn{padding:8px 20px;background:linear-gradient(135deg,#ffcc00,#ff9900);border:none;border-radius:25px;cursor:pointer;font-weight:700;font-size:0.85rem;color:#1a1a2e;transition:0.3s;display:flex;align-items:center;gap:6px;}
+#userBtn:hover{transform:scale(1.07);box-shadow:0 4px 16px rgba(255,153,0,0.5);}
+.user-avatar{width:26px;height:26px;border-radius:50%;background:#1a1a2e;display:none;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#ffcc00;border:2px solid #ffcc00;flex-shrink:0;}
+.dropdown{position:relative;}
+.dropdown-menu{display:none;position:absolute;right:0;top:calc(100% + 10px);background:#1a1a2e;border-radius:12px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,0.4);overflow:hidden;z-index:200;border:1px solid #ffffff18;}
+.dropdown-menu.show{display:block;animation:dropIn 0.2s ease;}
+@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.dropdown-menu a,.dropdown-menu button{display:block;width:100%;padding:10px 16px;color:#fff;text-decoration:none;font-size:0.85rem;background:none;border:none;text-align:left;cursor:pointer;transition:0.2s;}
+.dropdown-menu a:hover,.dropdown-menu button:hover{background:#ffffff15;color:#ffcc00;}
+.dropdown-menu .divider{height:1px;background:#ffffff15;margin:4px 0;}
+.dropdown-menu .logout-btn{color:#ff6b6b;}
+.dropdown-menu .logout-btn:hover{background:#ff6b6b22;color:#ff6b6b;}
+
+/* ── HERO ── */
+.hero{position:relative;width:100%;height:420px;overflow:hidden;}
+.hero-slides{position:relative;width:100%;height:100%;}
+.hero-slide{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transition:opacity 1.2s ease,transform 8s ease;transform:scale(1.08);}
+.hero-slide.active{opacity:1;transform:scale(1);}
+.hero-slide img{width:100%;height:100%;object-fit:cover;filter:brightness(0.55);}
+.hero .overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;text-align:center;width:90%;z-index:2;animation:fadeUp 1.2s ease forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translate(-50%,-40%)}to{opacity:1;transform:translate(-50%,-50%)}}
+.hero .overlay h1{font-size:2.2rem;font-weight:700;text-shadow:0 2px 10px rgba(0,0,0,0.5);}
+.hero .overlay p{font-size:1rem;margin-top:10px;color:#ffe;}
+.hero-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:3;}
+.dot{width:8px;height:8px;border-radius:50%;background:#ffffff55;cursor:pointer;transition:0.3s;}
+.dot.active{background:#ffcc00;width:22px;border-radius:10px;}
+
+/* ── SECTIONS ── */
+.fade-in{opacity:0;transform:translateY(30px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+.sec-title{font-size:1.65rem;color:#1a1a2e;margin-bottom:6px;font-weight:700;}
+.sec-sub{color:#999;margin-bottom:32px;font-size:0.92rem;}
+
+.features{padding:55px 20px;text-align:center;background:#fff;}
+.feature-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;}
+.feature{background:#fff;border-radius:18px;padding:28px 22px;width:210px;transition:all 0.35s ease;border:1.5px solid #e8eeff;position:relative;overflow:hidden;}
+.feature::before{content:'';position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,#6c63ff,#48cfad);border-radius:18px 18px 0 0;}
+.feature:hover{transform:translateY(-8px);box-shadow:0 16px 36px rgba(108,99,255,0.15);border-color:#6c63ff;}
+.feature-icon{font-size:2rem;margin-bottom:10px;display:block;}
+.feature h3{font-size:0.98rem;color:#1a1a2e;font-weight:600;}
+.feature p{font-size:0.8rem;color:#888;margin-top:6px;line-height:1.5;}
+
+.jobs{padding:55px 20px;text-align:center;background:#f7f8fc;}
+.card-container{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;}
+.card{background:#fff;border-radius:20px;padding:28px 22px;width:210px;border:1.5px solid #f0f0f0;transition:all 0.35s ease;cursor:pointer;position:relative;overflow:hidden;}
+.card::after{content:'';position:absolute;bottom:0;left:0;width:0%;height:3px;background:linear-gradient(90deg,#ffcc00,#ff6b6b);transition:width 0.4s ease;}
+.card:hover::after{width:100%;}
+.card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 16px 36px rgba(0,0,0,0.12);border-color:#ffcc00;}
+.card-icon{font-size:2rem;margin-bottom:12px;display:block;}
+.card h3{font-size:1rem;color:#1a1a2e;font-weight:700;}
+.card p{font-size:0.8rem;color:#aaa;margin-top:6px;}
+
+.categories{padding:55px 20px;text-align:center;background:#fff;}
+.cat-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;}
+.cat{background:#f0f4ff;color:#3d52d5;padding:12px 24px;border-radius:35px;font-weight:600;cursor:pointer;font-size:0.88rem;transition:all 0.3s ease;border:1.5px solid #dde4ff;}
+.cat:hover,.cat.active{background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#ffcc00;transform:scale(1.07);box-shadow:0 6px 18px rgba(26,26,46,0.2);border-color:transparent;}
+
+.section{padding:65px 20px;text-align:center;background:linear-gradient(135deg,#1a1a2e,#0f3460);position:relative;overflow:hidden;}
+.section::before{content:'';position:absolute;width:300px;height:300px;background:#ffcc0015;border-radius:50%;top:-80px;right:-60px;animation:floatBg 6s ease-in-out infinite;}
+.section::after{content:'';position:absolute;width:200px;height:200px;background:#ffffff08;border-radius:50%;bottom:-60px;left:-40px;animation:floatBg 8s ease-in-out infinite reverse;}
+@keyframes floatBg{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
+.section h2{font-size:1.8rem;color:#ffcc00;position:relative;z-index:1;}
+.section p{color:#ccc;margin-top:10px;font-size:0.95rem;position:relative;z-index:1;}
+.section-btn{margin-top:24px;display:inline-block;padding:13px 34px;background:linear-gradient(135deg,#ffcc00,#ff9900);color:#1a1a2e;font-weight:700;border-radius:30px;cursor:pointer;border:none;font-size:0.95rem;transition:all 0.3s;position:relative;z-index:1;}
+.section-btn:hover{transform:scale(1.07);box-shadow:0 8px 24px rgba(255,153,0,0.45);}
+
+/* ── SEARCH RESULTS ── */
+#results{background:#f7f8fc;}
+.results-wrapper{max-width:1060px;margin:0 auto;padding:24px 20px;}
+.results-header{font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.results-header span{color:#6c63ff;}
+.results-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.filter-btn{padding:5px 14px;border-radius:20px;border:1.5px solid #e0e0e0;background:#fff;font-size:0.75rem;font-weight:600;color:#555;cursor:pointer;transition:0.2s;}
+.filter-btn:hover,.filter-btn.active{background:#1a1a2e;color:#ffcc00;border-color:#1a1a2e;}
+.job-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;}
+.search-card{background:#fff;padding:20px;border-radius:18px;box-shadow:0 4px 18px rgba(0,0,0,0.08);border:1.5px solid #f0f0f0;transition:all 0.3s ease;position:relative;overflow:hidden;width:290px;text-align:left;}
+.search-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,#6c63ff,#48cfad);}
+.search-card:hover{transform:translateY(-6px);box-shadow:0 12px 30px rgba(108,99,255,0.15);border-color:#6c63ff;}
+.search-card h3{color:#1a1a2e;font-size:0.98rem;font-weight:700;}
+.search-card .s-company{color:#6c63ff;font-size:0.8rem;font-weight:600;margin-top:3px;}
+.job-meta{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0;}
+.job-badge{padding:3px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;}
+.job-badge.loc{background:#fff5e8;color:#c97c0a;}
+.job-badge.sal{background:#e8fff5;color:#1a9e6e;}
+.job-badge.typ{background:#f0f4ff;color:#3d52d5;}
+.job-badge.exp{background:#fff0f5;color:#c0366a;}
+.search-card .s-tags{font-size:0.72rem;color:#aaa;margin-top:2px;}
+.search-card .s-desc{font-size:0.75rem;color:#666;margin-top:8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.search-card .apply-btn{width:100%;margin-top:12px;padding:8px 0;border-radius:22px;border:none;background:linear-gradient(135deg,#ffcc00,#ff9900);cursor:pointer;font-weight:700;font-size:0.82rem;color:#1a1a2e;transition:0.3s;text-decoration:none;display:block;text-align:center;}
+.search-card .apply-btn:hover{transform:scale(1.04);box-shadow:0 4px 14px rgba(255,153,0,0.35);}
+.search-loading{text-align:center;padding:36px 20px;color:#888;}
+.search-loading .spinner{width:34px;height:34px;border:4px solid #e0e0e0;border-top:4px solid #6c63ff;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-badge{display:inline-flex;align-items:center;gap:4px;background:linear-gradient(135deg,#6c63ff22,#48cfad22);border:1px solid #6c63ff44;border-radius:20px;padding:3px 10px;font-size:0.68rem;color:#6c63ff;font-weight:700;margin-bottom:10px;}
+
+/* ── FOOTER ── */
+.footer{background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#fff;padding:28px 30px 16px;}
+.footer-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:1px solid #ffffff18;padding-bottom:18px;}
+.footer-brand .logo{font-size:1.1rem;}
+.footer-brand p{font-size:0.74rem;color:#aaa;margin-top:6px;max-width:200px;line-height:1.55;}
+.footer-links h4,.footer-contact h4{font-size:0.78rem;color:#ffcc00;font-weight:700;margin-bottom:9px;text-transform:uppercase;letter-spacing:0.8px;}
+.footer-links a{display:block;font-size:0.74rem;color:#bbb;text-decoration:none;margin-bottom:5px;transition:0.2s;}
+.footer-links a:hover{color:#ffcc00;padding-left:4px;}
+.footer-contact p{font-size:0.74rem;color:#bbb;margin-bottom:5px;}
+.footer-socials{display:flex;gap:8px;margin-top:10px;}
+.social-btn{width:32px;height:32px;background:#ffffff15;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:0.3s;text-decoration:none;color:#fff;}
+.social-btn:hover{background:#ffcc00;color:#1a1a2e;transform:scale(1.15);}
+.footer-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;padding-top:12px;gap:8px;}
+.copy{font-size:0.68rem;color:#666;}
+.footer-pills{display:flex;gap:8px;flex-wrap:wrap;}
+.pill{font-size:0.67rem;background:#ffffff10;color:#999;padding:3px 10px;border-radius:20px;cursor:pointer;transition:0.2s;}
+.pill:hover{background:#ffcc0022;color:#ffcc00;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .navbar{flex-direction:column;align-items:flex-start;padding:12px 15px;}
+  .nav-center{width:100%;}
+  .nav-center input{width:100%!important;}
+  .nav-links{width:100%;gap:8px;justify-content:flex-start;flex-wrap:wrap;}
+  .hero{height:280px;}
+  .hero .overlay h1{font-size:1.4rem;}
+  .feature,.card{width:calc(50% - 16px);min-width:140px;}
+  .footer-top{flex-direction:column;gap:16px;}
+  .sec-title{font-size:1.35rem;}
+  .search-card{width:100%;max-width:100%;}
+}
+@media(max-width:480px){
+  .feature,.card{width:100%;max-width:320px;}
+  .hero{height:220px;}
+  .hero .overlay h1{font-size:1.05rem;}
+  .cat{padding:10px 16px;font-size:0.82rem;}
+  .nav-links a{font-size:0.8rem;padding:3px 6px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo"><span>Skills</span>Matter</div>
+  <div class="nav-center">
+    <input id="searchBox" onkeyup="searchJobs()" placeholder="🔍 Search jobs, companies, skills...">
+  </div>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="jobs.html" >Jobs</a>
+    <!-- ✅ FIX: same page-ல் திறக்கும், new tab இல்லை -->
+    <a href="company.html">🏢 Companies</a>
+    <a href="profile.html">Profile</a>
+    <div class="dropdown" id="userDropdown">
+      <button id="userBtn" onclick="handleUserBtn()">
+        <span class="user-avatar" id="userAvatar"></span>
+        <span id="userLabel">Get Started</span>
+      </button>
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="profile.html">👤 My Profile</a>
+        <a href="#">📋 My Applications</a>
+        <div class="divider"></div>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div id="results"></div>
+
+<div id="homeContent">
+
+<div class="hero">
+  <div class="hero-slides">
+    <div class="hero-slide active"><img src="https://images.unsplash.com/photo-1521791136064-7986c2920216" alt="careers"></div>
+    <div class="hero-slide"><img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d" alt="office"></div>
+    <div class="hero-slide"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" alt="laptop"></div>
+  </div>
+  <div class="overlay">
+    <h1>Build Your Career With the Right Opportunity</h1>
+    <p>Find real jobs in India — AI-powered search across all fields</p>
+  </div>
+  <div class="hero-dots">
+    <div class="dot active" onclick="goSlide(0)"></div>
+    <div class="dot" onclick="goSlide(1)"></div>
+    <div class="dot" onclick="goSlide(2)"></div>
+  </div>
+</div>
+
+<div class="features fade-in">
+  <h2 class="sec-title">What You Can Do</h2>
+  <p class="sec-sub">Everything you need to land your dream job in India</p>
+  <div class="feature-grid">
+    <div class="feature"><span class="feature-icon">🤖</span><h3>AI Job Search</h3><p>Claude AI finds real India jobs matching your skills instantly.</p></div>
+    <div class="feature"><span class="feature-icon">📄</span><h3>Apply Easily</h3><p>Apply directly to company sites with one click.</p></div>
+    <div class="feature"><span class="feature-icon">📌</span><h3>Save Jobs</h3><p>Bookmark jobs and apply later anytime.</p></div>
+    <div class="feature"><span class="feature-icon">📊</span><h3>Track Applications</h3><p>Monitor your job applications easily.</p></div>
+  </div>
+</div>
+
+<div class="jobs fade-in">
+  <h2 class="sec-title">Top Job Roles</h2>
+  <p class="sec-sub">Click to search — handpicked for India market</p>
+  <div class="card-container">
+    <div class="card" onclick="quickSearch('Web Developer')"><span class="card-icon">💻</span><h3>Web Developer</h3><p>React, Angular, Vue</p></div>
+    <div class="card" onclick="quickSearch('Java Developer')"><span class="card-icon">☕</span><h3>Java Developer</h3><p>Spring Boot, Backend</p></div>
+    <div class="card" onclick="quickSearch('Software Tester')"><span class="card-icon">🧪</span><h3>Software Tester</h3><p>QA, Automation</p></div>
+    <div class="card" onclick="quickSearch('Data Scientist')"><span class="card-icon">📊</span><h3>Data Scientist</h3><p>ML, Python, Analytics</p></div>
+    <div class="card" onclick="quickSearch('DevOps Engineer')"><span class="card-icon">⚙️</span><h3>DevOps Engineer</h3><p>AWS, Docker, CI/CD</p></div>
+    <div class="card" onclick="quickSearch('UI UX Designer')"><span class="card-icon">🎨</span><h3>UI/UX Designer</h3><p>Figma, Prototyping</p></div>
+  </div>
+</div>
+
+<div class="categories fade-in">
+  <h2 class="sec-title">Explore by Field</h2>
+  <p class="sec-sub">Browse all job categories available in India</p>
+  <div class="cat-grid">
+    <div class="cat" onclick="quickSearch('IT Software')">💻 IT & Software</div>
+    <div class="cat" onclick="quickSearch('Data Analytics')">📊 Data & Analytics</div>
+    <div class="cat" onclick="quickSearch('QA Testing')">🧪 QA & Testing</div>
+    <div class="cat" onclick="quickSearch('UI UX Design')">🎨 Design & UX</div>
+    <div class="cat" onclick="quickSearch('Mobile App Development')">📱 Mobile Dev</div>
+    <div class="cat" onclick="quickSearch('Backend Developer')">⚙️ Backend</div>
+    <div class="cat" onclick="quickSearch('Cloud AWS')">☁️ Cloud & DevOps</div>
+    <div class="cat" onclick="quickSearch('Cybersecurity')">🔐 Cybersecurity</div>
+    <div class="cat" onclick="quickSearch('Finance Accounting')">💰 Finance</div>
+    <div class="cat" onclick="quickSearch('Human Resources')">👥 HR & Admin</div>
+    <div class="cat" onclick="quickSearch('Digital Marketing')">📣 Marketing</div>
+    <div class="cat" onclick="quickSearch('Sales Business Development')">🤝 Sales & BD</div>
+    <div class="cat" onclick="quickSearch('Mechanical Engineer')">🔧 Mechanical</div>
+    <div class="cat" onclick="quickSearch('Civil Engineer')">🏗️ Civil</div>
+    <div class="cat" onclick="quickSearch('Healthcare Medical')">🏥 Healthcare</div>
+    <div class="cat" onclick="quickSearch('Teaching Education')">📚 Education</div>
+  </div>
+</div>
+
+<div class="section fade-in">
+  <h2>Start Your Career Journey Today</h2>
+  <p>Discover real opportunities from top India companies — powered by AI.</p>
+  <button class="section-btn" onclick="quickSearch('fresher jobs India 2024')">Explore All Jobs →</button>
+</div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo"><span>Skills</span>Matter</div>
+      <p>Helping students & professionals find the right career opportunities in India.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a>
+      <a href="#">Jobs</a>
+      <a href="company.html">Companies</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="footer-contact">
+      <h4>Contact Us</h4>
+      <p>📧 support@skillsmatter.in</p>
+      <p>📞 +91 9876543210</p>
+      <div class="footer-socials">
+        <a class="social-btn" href="https://linkedin.com" target="_blank" title="LinkedIn">💼</a>
+        <a class="social-btn" href="https://twitter.com" target="_blank" title="Twitter">🐦</a>
+        <a class="social-btn" href="https://instagram.com" target="_blank" title="Instagram">📸</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="copy">© 2026 SkillsMatter. All Rights Reserved.</p>
+    <div class="footer-pills">
+      <span class="pill">Privacy Policy</span>
+      <span class="pill">Terms of Use</span>
+      <span class="pill">Support</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── USER ── */
+function updateNavbar(){
+  const u=localStorage.getItem("username");
+  const label=document.getElementById("userLabel");
+  const avatar=document.getElementById("userAvatar");
+  if(u){label.textContent=u;avatar.textContent=u.charAt(0).toUpperCase();avatar.style.display="flex";}
+  else{label.textContent="Get Started";avatar.style.display="none";}
+}
+function handleUserBtn(){
+  if(!localStorage.getItem("username")){window.location.href="login.html";}
+  else{document.getElementById("dropdownMenu").classList.toggle("show");}
+}
+function logout(){
+  localStorage.removeItem("username");
+  localStorage.removeItem("email");
+  localStorage.removeItem("token");
+  document.getElementById("dropdownMenu").classList.remove("show");
+  updateNavbar();
+}
+document.addEventListener("click",e=>{
+  if(!document.getElementById("userDropdown").contains(e.target))
+    document.getElementById("dropdownMenu").classList.remove("show");
+});
+updateNavbar();
+
+/* ── HERO SLIDESHOW ── */
+let cur=0;
+const slides=document.querySelectorAll(".hero-slide");
+const dots=document.querySelectorAll(".dot");
+function goSlide(n){
+  slides[cur].classList.remove("active");dots[cur].classList.remove("active");
+  cur=n;slides[cur].classList.add("active");dots[cur].classList.add("active");
+}
+setInterval(()=>goSlide((cur+1)%slides.length),4500);
+
+/* ── SCROLL FADE ── */
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{
+  if(e.isIntersecting)e.target.classList.add("visible");
+}),{threshold:0.15});
+document.querySelectorAll(".fade-in").forEach(el=>obs.observe(el));
+
+/* ── SEARCH ── */
+let searchTimer=null;
+let allJobs=[];
+
+function quickSearch(q){
+  document.getElementById("searchBox").value=q;
+  fetchRealJobs(q);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function searchJobs(){
+  const kw=document.getElementById("searchBox").value.trim();
+  if(!kw){document.getElementById("results").innerHTML="";return;}
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>fetchRealJobs(kw),600);
+}
+
+async function fetchRealJobs(query){
+  const resultsDiv=document.getElementById("results");
+  resultsDiv.innerHTML=`<div class="results-wrapper"><div class="search-loading"><div class="spinner"></div><p>🔍 Searching jobs for "<strong>${query}</strong>"...</p></div></div>`;
+  try{
+    const res=await fetch(`https://skills-matters-backend.onrender.com/api/jobs?q=${encodeURIComponent(query)}`);
+    const data=await res.json();
+    const jobs=(data.jobs||[]).slice(0,12);
+    allJobs=jobs;
+    renderJobResults(query,jobs);
+  }catch(err){
+    resultsDiv.innerHTML=`<div class="results-wrapper"><p style="text-align:center;padding:30px;color:#e74c3c;">⚠️ Could not load jobs. Please check your connection.</p></div>`;
+  }
+}
+
+function renderJobResults(query,jobs){
+  const resultsDiv=document.getElementById("results");
+  const types=["All",...new Set(jobs.map(j=>j.type))];
+  if(!jobs.length){
+    resultsDiv.innerHTML=`<div class="results-wrapper"><p style="text-align:center;padding:30px;color:#888;">No jobs found for "<strong>${query}</strong>" ❌</p></div>`;
+    return;
+  }
+  resultsDiv.innerHTML=`
+    <div class="results-wrapper">
+      <div class="results-header">
+        <span><span>${jobs.length} jobs</span> found for "${query}"</span>
+        <span class="ai-badge">🔗 Direct Apply Links</span>
+      </div>
+      <div class="results-filter" id="jobFilters">
+        ${types.map(t=>`<button class="filter-btn ${t==='All'?'active':''}" onclick="filterJobs('${t}',event)">${t}</button>`).join("")}
+      </div>
+      <div class="job-grid" id="jobGrid">${renderCards(jobs)}</div>
+    </div>`;
+}
+
+function renderCards(jobs){
+  const careerMap={
+    "TCS":"https://www.tcs.com/careers","Infosys":"https://career.infosys.com",
+    "Wipro":"https://careers.wipro.com","HCL Technologies":"https://www.hcltech.com/careers",
+    "Tech Mahindra":"https://careers.techmahindra.com","Cognizant":"https://careers.cognizant.com",
+    "Accenture":"https://www.accenture.com/in-en/careers","Capgemini":"https://www.capgemini.com/in-en/careers/",
+    "Flipkart":"https://www.flipkartcareers.com","Zomato":"https://www.zomato.com/careers",
+    "Swiggy":"https://careers.swiggy.com","Paytm":"https://paytm.com/careers",
+    "Razorpay":"https://razorpay.com/jobs/","HDFC Bank":"https://www.hdfcbank.com",
+    "ICICI Bank":"https://www.icicicareers.com","Deloitte":"https://apply.deloitte.com/careers/SearchJobs/india",
+    "KPMG":"https://home.kpmg/in/en/home/careers.html"
+  };
+  return jobs.map(j=>{
+    let url=(j.applyUrl&&j.applyUrl.startsWith("http"))?j.applyUrl:"";
+    if(!url){
+      const key=Object.keys(careerMap).find(k=>j.company&&j.company.toLowerCase().includes(k.toLowerCase()));
+      url=key?careerMap[key]:`https://www.naukri.com/jobs-in-india?k=${encodeURIComponent(j.title||'')}`;
+    }
+    return `
+    <div class="search-card">
+      <h3>${j.title}</h3>
+      <div class="s-company">🏢 ${j.company}</div>
+      <div class="job-meta">
+        <span class="job-badge loc">📍 ${j.location}</span>
+        ${j.salary?`<span class="job-badge sal">💰 ${j.salary}</span>`:''}
+        <span class="job-badge typ">🌐 ${j.type||'Full-time'}</span>
+        ${j.experience?`<span class="job-badge exp">⏱ ${j.experience}</span>`:''}
+      </div>
+      ${j.skills?`<div class="s-tags">🛠 ${j.skills}</div>`:''}
+      ${j.description?`<div class="s-desc">${j.description}</div>`:''}
+      <a class="apply-btn" href="${url}" target="_blank" rel="noopener noreferrer">Apply Now →</a>
+    </div>`;
+  }).join("");
+}
+
+function filterJobs(type,event){
+  document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+  event.target.classList.add("active");
+  const filtered=type==="All"?allJobs:allJobs.filter(j=>j.type===type);
+  document.getElementById("jobGrid").innerHTML=renderCards(filtered);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Companies — SkillsMatter</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f7f8fc;min-height:100vh;}
+
+/* ── NAVBAR ── */
+.navbar{display:flex;justify-content:space-between;align-items:center;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:14px 30px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,0.4);flex-wrap:wrap;gap:10px;}
+.logo{font-size:1.3rem;font-weight:bold;letter-spacing:1px;text-decoration:none;}
+.logo span{color:#ffcc00;}
+.logo{color:white;}
+.nav-links{display:flex;align-items:center;gap:12px;}
+.nav-links a{text-decoration:none;color:#ddd;font-weight:500;font-size:0.88rem;transition:0.3s;padding:4px 10px;border-radius:8px;}
+.nav-links a:hover,.nav-links a.active{color:#ffcc00;background:#ffffff10;}
+.back-btn{display:flex;align-items:center;gap:6px;padding:8px 18px;background:#ffffff18;color:#fff;border:1px solid #ffffff30;border-radius:22px;cursor:pointer;font-size:0.85rem;font-weight:600;text-decoration:none;transition:0.3s;}
+.back-btn:hover{background:#ffcc00;color:#1a1a2e;border-color:#ffcc00;}
+
+/* ── HERO BANNER ── */
+.page-hero{background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:50px 30px;text-align:center;position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;width:350px;height:350px;background:#ffcc0010;border-radius:50%;top:-100px;right:-80px;}
+.page-hero::after{content:'';position:absolute;width:250px;height:250px;background:#6c63ff10;border-radius:50%;bottom:-80px;left:-60px;}
+.page-hero h1{font-size:2rem;color:#fff;font-weight:700;position:relative;z-index:1;}
+.page-hero h1 span{color:#ffcc00;}
+.page-hero p{color:#bbb;margin-top:8px;font-size:0.95rem;position:relative;z-index:1;}
+.hero-stats{display:flex;justify-content:center;gap:30px;margin-top:24px;flex-wrap:wrap;position:relative;z-index:1;}
+.stat-item{text-align:center;}
+.stat-num{font-size:1.6rem;font-weight:700;color:#ffcc00;}
+.stat-label{font-size:0.75rem;color:#888;margin-top:2px;}
+
+/* ── MAIN CONTENT ── */
+.main{max-width:1200px;margin:0 auto;padding:30px 20px;}
+
+/* ── SEARCH & FILTER BAR ── */
+.controls{background:#fff;border-radius:18px;padding:20px 24px;box-shadow:0 4px 18px rgba(0,0,0,0.07);margin-bottom:28px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;}
+.search-wrap{flex:1;min-width:220px;}
+.search-wrap label{font-size:0.72rem;color:#999;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:6px;}
+.search-wrap input{width:100%;padding:10px 16px;border-radius:25px;border:1.5px solid #e0e0e0;outline:none;font-size:0.88rem;transition:0.2s;background:#f7f8fc;}
+.search-wrap input:focus{border-color:#6c63ff;background:#fff;}
+.filter-wrap{flex:1;min-width:220px;}
+.filter-wrap label{font-size:0.72rem;color:#999;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:6px;}
+.sector-pills{display:flex;flex-wrap:wrap;gap:7px;}
+.s-pill{padding:6px 14px;border-radius:20px;border:1.5px solid #e0e0e0;background:#fff;font-size:0.76rem;font-weight:600;color:#555;cursor:pointer;transition:0.2s;}
+.s-pill:hover,.s-pill.active{background:#1a1a2e;color:#ffcc00;border-color:#1a1a2e;}
+
+/* ── RESULTS COUNT ── */
+.results-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.results-info .count{font-size:0.88rem;color:#888;}
+.results-info .count strong{color:#1a1a2e;}
+.sort-select{padding:6px 12px;border-radius:16px;border:1.5px solid #e0e0e0;background:#fff;font-size:0.78rem;font-weight:600;color:#555;cursor:pointer;outline:none;}
+
+/* ── COMPANIES GRID ── */
+.companies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}
+
+/* ── COMPANY CARD ── */
+.company-card{background:#fff;border-radius:20px;padding:24px 22px;border:1.5px solid #f0f0f0;transition:all 0.3s ease;cursor:pointer;position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.company-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;background:linear-gradient(90deg,#6c63ff,#48cfad);transition:width 0.4s ease;}
+.company-card:hover::after{width:100%;}
+.company-card:hover{transform:translateY(-6px);box-shadow:0 14px 32px rgba(0,0,0,0.11);border-color:#6c63ff40;}
+
+/* Card top row */
+.card-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.company-logo{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:0.5px;}
+.company-info{flex:1;min-width:0;}
+.company-name{font-size:1rem;font-weight:700;color:#1a1a2e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.company-sector{font-size:0.72rem;color:#6c63ff;font-weight:600;margin-top:2px;}
+.company-hq{font-size:0.7rem;color:#aaa;margin-top:2px;}
+
+/* Rating badge */
+.rating-badge{background:#fffbe8;color:#c97c0a;font-size:0.7rem;font-weight:700;padding:3px 8px;border-radius:10px;white-space:nowrap;}
+
+/* Description */
+.company-desc{font-size:0.78rem;color:#777;line-height:1.55;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1;}
+
+/* Meta pills */
+.meta-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.meta-pill{padding:3px 10px;border-radius:16px;font-size:0.67rem;font-weight:600;}
+.meta-pill.employees{background:#f0f4ff;color:#3d52d5;}
+.meta-pill.founded{background:#f0fff4;color:#1a9e6e;}
+.meta-pill.openings{background:#fff5e8;color:#c97c0a;}
+
+/* Jobs list */
+.jobs-label{font-size:0.68rem;color:#bbb;font-weight:600;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:6px;}
+.job-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;}
+.job-tag{background:#f7f8fc;color:#444;font-size:0.67rem;font-weight:500;padding:3px 9px;border-radius:12px;border:1px solid #eee;cursor:pointer;transition:0.2s;}
+.job-tag:hover{background:#6c63ff;color:#fff;border-color:#6c63ff;}
+
+/* CTA button */
+.visit-btn{width:100%;padding:9px 0;border-radius:22px;border:none;background:linear-gradient(135deg,#1a1a2e,#0f3460);cursor:pointer;font-weight:700;font-size:0.82rem;color:#ffcc00;transition:0.3s;text-decoration:none;display:block;text-align:center;letter-spacing:0.3px;}
+.visit-btn:hover{background:linear-gradient(135deg,#ffcc00,#ff9900);color:#1a1a2e;transform:scale(1.03);box-shadow:0 4px 14px rgba(255,153,0,0.35);}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:60px 20px;color:#aaa;}
+.empty-state .icon{font-size:3rem;margin-bottom:12px;}
+.empty-state h3{color:#888;font-size:1rem;}
+.empty-state p{font-size:0.82rem;margin-top:6px;}
+
+/* ── FOOTER ── */
+.footer{background:linear-gradient(135deg,#1a1a2e,#0f3460);color:#fff;padding:20px 30px;margin-top:50px;text-align:center;}
+.footer p{font-size:0.75rem;color:#666;}
+.footer .logo-f{font-size:1rem;font-weight:700;margin-bottom:6px;}
+.footer .logo-f span{color:#ffcc00;}
+
+@media(max-width:768px){
+  .navbar{padding:12px 15px;}
+  .page-hero h1{font-size:1.5rem;}
+  .hero-stats{gap:20px;}
+  .companies-grid{grid-template-columns:1fr;}
+  .controls{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="logo" href="index.html"><span>Skills</span>Matter</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#jobs">Jobs</a>
+    <a href="company.html" class="active">🏢 Companies</a>
+    <a href="#" class="back-btn">← Back to Jobs</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <h1>Top <span>Companies</span> in India</h1>
+  <p>Explore leading employers across all sectors — click to visit careers pages directly</p>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">26+</div><div class="stat-label">Top Companies</div></div>
+    <div class="stat-item"><div class="stat-num">7</div><div class="stat-label">Sectors</div></div>
+    <div class="stat-item"><div class="stat-num">500K+</div><div class="stat-label">Open Roles</div></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div class="search-wrap">
+      <label>Search Companies</label>
+      <input id="companySearch" oninput="filterCompanies()" placeholder="🔍 Search by name, sector, location...">
+    </div>
+    <div class="filter-wrap">
+      <label>Filter by Sector</label>
+      <div class="sector-pills" id="sectorPills"></div>
+    </div>
+  </div>
+
+  <!-- RESULTS INFO -->
+  <div class="results-info">
+    <p class="count">Showing <strong id="countDisplay">26</strong> companies</p>
+    <select class="sort-select" id="sortSelect" onchange="filterCompanies()">
+      <option value="name">Sort: A–Z</option>
+      <option value="employees">Sort: Size</option>
+      <option value="founded">Sort: Founded</option>
+    </select>
+  </div>
+
+  <!-- GRID -->
+  <div class="companies-grid" id="companiesGrid"></div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="logo-f"><span>Skills</span>Matter</div>
+  <p>© 2026 SkillsMatter. All Rights Reserved.</p>
+</footer>
+
+<script>
+const COMPANIES = [
+  // IT & Software
+  {name:"TCS",sector:"IT",desc:"India's largest IT services company with a global presence across 46 countries.",color:"#0066cc",jobs:["Software Engineer","Business Analyst","Java Developer","QA Engineer"],size:"800K+",founded:1968,hq:"Mumbai",rating:"4.0",openings:"5000+",careerUrl:"https://www.tcs.com/careers"},
+  {name:"Infosys",sector:"IT",desc:"Global leader in next-generation digital services and consulting.",color:"#007cc3",jobs:["Software Developer","Data Scientist","Cloud Engineer","UI Developer"],size:"350K+",founded:1981,hq:"Bengaluru",rating:"3.8",openings:"3000+",careerUrl:"https://career.infosys.com"},
+  {name:"Wipro",sector:"IT",desc:"Leading IT, consulting and business process services company.",color:"#341f6b",jobs:["Full Stack Developer","DevOps","Testing","SAP Consultant"],size:"250K+",founded:1945,hq:"Bengaluru",rating:"3.7",openings:"2500+",careerUrl:"https://careers.wipro.com"},
+  {name:"HCLTech",sector:"IT",desc:"Global technology company with engineering-led IT services and solutions.",color:"#e31837",jobs:["Python Developer","Network Engineer","Cybersecurity","ERP"],size:"220K+",founded:1976,hq:"Noida",rating:"3.8",openings:"2000+",careerUrl:"https://www.hcltech.com/careers"},
+  {name:"Tech Mahindra",sector:"IT",desc:"IT services & solutions focused on telecom and digital transformation.",color:"#c4112f",jobs:["React Developer","Angular Developer","QA Automation","Business Analyst"],size:"160K+",founded:1986,hq:"Pune",rating:"3.6",openings:"1500+",careerUrl:"https://careers.techmahindra.com"},
+  {name:"Cognizant",sector:"IT",desc:"Professional services company delivering digital, technology and operations.",color:"#1a3b6a",jobs:["Java Developer","Cloud Architect","RPA Developer","Data Engineer"],size:"340K+",founded:1994,hq:"Chennai",rating:"3.8",openings:"2200+",careerUrl:"https://careers.cognizant.com"},
+  {name:"Accenture India",sector:"IT",desc:"Strategy, consulting, digital, technology and operations services globally.",color:"#a100ff",jobs:["Consultant","SAP Developer","AI Engineer","Project Manager"],size:"300K+",founded:1989,hq:"Mumbai",rating:"4.0",openings:"4000+",careerUrl:"https://www.accenture.com/in-en/careers"},
+  {name:"Capgemini",sector:"IT",desc:"Global leader in consulting, digital transformation, and technology services.",color:"#12abdb",jobs:["Salesforce Developer","Azure Engineer","Data Analyst","QA Lead"],size:"60K+",founded:1967,hq:"Mumbai",rating:"3.8",openings:"1200+",careerUrl:"https://www.capgemini.com/in-en/careers/"},
+
+  // Startups & Product
+  {name:"Flipkart",sector:"Startup",desc:"India's leading e-commerce marketplace with 400M+ product listings.",color:"#f2711c",jobs:["SDE","Product Manager","Data Scientist","Android Developer"],size:"50K+",founded:2007,hq:"Bengaluru",rating:"3.9",openings:"800+",careerUrl:"https://www.flipkartcareers.com"},
+  {name:"Zomato",sector:"Startup",desc:"Food delivery, dining-out and restaurant technology platform.",color:"#e23744",jobs:["Backend Engineer","ML Engineer","iOS Developer","Growth Manager"],size:"5K+",founded:2008,hq:"Gurugram",rating:"3.8",openings:"400+",careerUrl:"https://www.zomato.com/careers"},
+  {name:"Swiggy",sector:"Startup",desc:"India's food, grocery and quick-commerce delivery super-app.",color:"#fc8019",jobs:["SDE","Data Analyst","DevOps","Product Designer"],size:"5K+",founded:2014,hq:"Bengaluru",rating:"3.9",openings:"350+",careerUrl:"https://careers.swiggy.com"},
+  {name:"Ola",sector:"Startup",desc:"Ride-hailing and electric vehicle mobility platform across India.",color:"#18b800",jobs:["SDE","Product Manager","Data Engineer","Operations"],size:"10K+",founded:2010,hq:"Bengaluru",rating:"3.5",openings:"500+",careerUrl:"https://www.olacabs.com/careers"},
+
+  // Fintech
+  {name:"Paytm",sector:"Fintech",desc:"India's leading payments and financial services platform.",color:"#00b9f1",jobs:["React Developer","Backend Python","Data Analyst","Risk Manager"],size:"12K+",founded:2010,hq:"Noida",rating:"3.6",openings:"600+",careerUrl:"https://paytm.com/careers"},
+  {name:"Razorpay",sector:"Fintech",desc:"India's leading payment solutions provider for businesses of all sizes.",color:"#2b6cb0",jobs:["SDE","DevSecOps","Product Manager","Solutions Engineer"],size:"3K+",founded:2014,hq:"Bengaluru",rating:"4.2",openings:"250+",careerUrl:"https://razorpay.com/jobs/"},
+  {name:"CRED",sector:"Fintech",desc:"Credit card bill payment and rewards platform for financially trustworthy users.",color:"#1a1a2e",jobs:["SDE","Android","iOS","Data Scientist"],size:"1K+",founded:2018,hq:"Bengaluru",rating:"4.0",openings:"150+",careerUrl:"https://careers.cred.club"},
+  {name:"PhonePe",sector:"Fintech",desc:"India's leading digital payments platform with 500M+ registered users.",color:"#5f259f",jobs:["SDE","ML Engineer","Product Manager","Security Engineer"],size:"4K+",founded:2015,hq:"Bengaluru",rating:"4.1",openings:"300+",careerUrl:"https://www.phonepe.com/careers/"},
+
+  // Banking & Finance
+  {name:"HDFC Bank",sector:"Finance",desc:"India's largest private sector bank with 8000+ branches nationwide.",color:"#004c97",jobs:["Relationship Manager","Credit Analyst","IT Officer","Branch Manager"],size:"150K+",founded:1994,hq:"Mumbai",rating:"3.8",openings:"2000+",careerUrl:"https://www.hdfcbank.com/content/bbp/repositories/723fb80a-2dde-42a3-9793-7ae1be57c87f/?folderPath=/Common/Career/"},
+  {name:"ICICI Bank",sector:"Finance",desc:"Leading private sector bank with a tech-first approach to banking.",color:"#f26723",jobs:["Software Developer","Data Analyst","Wealth Manager","Risk Officer"],size:"120K+",founded:1994,hq:"Mumbai",rating:"3.7",openings:"1500+",careerUrl:"https://www.icicicareers.com"},
+  {name:"SBI",sector:"Finance",desc:"India's largest public sector bank serving 500M+ customers.",color:"#22409a",jobs:["Probationary Officer","Clerk","IT Officer","Specialist Officer"],size:"250K+",founded:1955,hq:"Mumbai",rating:"3.9",openings:"5000+",careerUrl:"https://sbi.co.in/careers"},
+
+  // Manufacturing
+  {name:"Tata Motors",sector:"Manufacturing",desc:"India's largest auto manufacturer and global EV industry leader.",color:"#00205b",jobs:["Mechanical Engineer","Embedded Systems","Quality Engineer","R&D Engineer"],size:"80K+",founded:1945,hq:"Mumbai",rating:"3.9",openings:"700+",careerUrl:"https://www.tatamotors.com/careers/"},
+  {name:"L&T",sector:"Manufacturing",desc:"Multinational conglomerate in engineering, construction and technology.",color:"#e31837",jobs:["Civil Engineer","Electrical Engineer","Project Engineer","Design Engineer"],size:"300K+",founded:1938,hq:"Mumbai",rating:"4.0",openings:"1000+",careerUrl:"https://www.larsentoubro.com/careers/"},
+  {name:"Mahindra",sector:"Manufacturing",desc:"Multinational group in automobiles, tech, agri and financial services.",color:"#c41230",jobs:["Mechanical Engineer","Software Engineer","Product Design","Supply Chain"],size:"260K+",founded:1945,hq:"Mumbai",rating:"3.9",openings:"800+",careerUrl:"https://jobs.mahindra.com"},
+
+  // Telecom
+  {name:"Jio",sector:"Telecom",desc:"India's largest telecom and digital services company with 450M+ subscribers.",color:"#0066cc",jobs:["Network Engineer","Software Developer","Data Engineer","5G Specialist"],size:"50K+",founded:2016,hq:"Mumbai",rating:"3.8",openings:"600+",careerUrl:"https://www.jio.com/careers/"},
+  {name:"Airtel",sector:"Telecom",desc:"Leading telecom operator with 5G, digital TV and enterprise services.",color:"#e40000",jobs:["Network Engineer","Cloud Engineer","Frontend Developer","Product Manager"],size:"20K+",founded:1995,hq:"New Delhi",rating:"3.8",openings:"400+",careerUrl:"https://www.airtel.in/careers/"},
+
+  // Consulting
+  {name:"Deloitte India",sector:"Consulting",desc:"Big Four professional services firm providing audit, tax and advisory.",color:"#86bc25",jobs:["Analyst","SAP Consultant","Risk Advisory","Tax Manager"],size:"100K+",founded:1845,hq:"Mumbai",rating:"4.0",openings:"2000+",careerUrl:"https://apply.deloitte.com/careers/SearchJobs/india"},
+  {name:"KPMG India",sector:"Consulting",desc:"Global network of professional firms providing audit and advisory services.",color:"#00338d",jobs:["Business Analyst","IT Auditor","Data Analytics","Tax Consultant"],size:"20K+",founded:1870,hq:"Mumbai",rating:"3.9",openings:"800+",careerUrl:"https://kpmg.com/in/en/home/careers.html"},
+];
+
+const SECTORS = ["All","IT","Startup","Fintech","Finance","Manufacturing","Telecom","Consulting"];
+let activeSector = "All";
+
+/* ── INIT ── */
+function init(){
+  // Build sector pills
+  const pillsContainer = document.getElementById("sectorPills");
+  pillsContainer.innerHTML = SECTORS.map(s =>
+    `<button class="s-pill ${s==='All'?'active':''}" onclick="setSector('${s}',this)">${s}</button>`
+  ).join("");
+  filterCompanies();
+}
+
+function setSector(s, btn){
+  activeSector = s;
+  document.querySelectorAll(".s-pill").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  filterCompanies();
+}
+
+function filterCompanies(){
+  const q = (document.getElementById("companySearch").value || "").toLowerCase();
+  const sort = document.getElementById("sortSelect").value;
+
+  let list = COMPANIES.filter(c => {
+    const matchSector = activeSector === "All" || c.sector === activeSector;
+    const matchQ = !q || c.name.toLowerCase().includes(q) || c.sector.toLowerCase().includes(q) || c.hq.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q);
+    return matchSector && matchQ;
+  });
+
+  // Sort
+  list.sort((a,b) => {
+    if(sort === "name") return a.name.localeCompare(b.name);
+    if(sort === "employees") return parseInt(b.size) - parseInt(a.size);
+    if(sort === "founded") return a.founded - b.founded;
+    return 0;
+  });
+
+  document.getElementById("countDisplay").textContent = list.length;
+  renderGrid(list);
+}
+
+function renderGrid(list){
+  const grid = document.getElementById("companiesGrid");
+  if(!list.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1"><div class="icon">🏢</div><h3>No companies found</h3><p>Try a different search or sector filter</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(c => {
+    const initials = c.name.replace(/[^A-Za-z\s]/g,'').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase() || c.name.substring(0,3).toUpperCase();
+    return `
+    <div class="company-card" onclick="window.open('${c.careerUrl}','_blank')">
+      <div class="card-top">
+        <div class="company-logo" style="background:${c.color}">${initials}</div>
+        <div class="company-info">
+          <div class="company-name">${c.name}</div>
+          <div class="company-sector">📁 ${c.sector}</div>
+          <div class="company-hq">📍 ${c.hq}</div>
+        </div>
+        <div class="rating-badge">⭐ ${c.rating}</div>
+      </div>
+      <div class="company-desc">${c.desc}</div>
+      <div class="meta-row">
+        <span class="meta-pill employees">👥 ${c.size} employees</span>
+        <span class="meta-pill founded">📅 Est. ${c.founded}</span>
+        <span class="meta-pill openings">💼 ${c.openings} openings</span>
+      </div>
+      <div class="jobs-label">Popular Roles</div>
+      <div class="job-tags">
+        ${c.jobs.map(j=>`<span class="job-tag" onclick="event.stopPropagation();searchRole('${j}','${c.name}')">${j}</span>`).join("")}
+      </div>
+      <a class="visit-btn" href="${c.careerUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
+        Visit Careers Page →
+      </a>
+    </div>`;
+  }).join("");
+}
+
+function searchRole(role, company){
+  /* Build targeted job search URL for that role + company on Naukri */
+  const url = `https://www.naukri.com/jobs-in-india?k=${encodeURIComponent(role)}&company=${encodeURIComponent(company)}`;
+  window.open(url, "_blank");
+}
+
+init();
+</script>
+</body>
+</html>
